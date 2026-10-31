@@ -1,0 +1,114 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- ========================================================================
+       NoBodyMorePlayers — BepInEx 5 player-limit mod for
+       "No Body, No Problem!" (Crime Cleanup Co. / Red Axe Games)
+
+       Supported BepInEx version: 5.4.23.x (Mono backend)
+       Target runtime          : .NET Framework 4.6
+       Language version        : C# 8+ (nullable enabled)
+       ======================================================================== -->
+
+  <PropertyGroup>
+    <TargetFramework>net46</TargetFramework>
+    <AssemblyName>NoBodyMorePlayers</AssemblyName>
+    <RootNamespace>NoBodyMorePlayers</RootNamespace>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <Description>Configurable player and team-size limits for No Body, No Problem!</Description>
+    <Copyright>Copyright © 2026 Contributors. Licensed under MIT.</Copyright>
+  </PropertyGroup>
+
+  <!-- ========================================================================
+       CONTRIBUTOR SETUP — READ BEFORE BUILDING
+       ========================================================================
+       1. Set GameDir to your local game installation folder.  Example paths:
+            Windows Steam : C:\Program Files (x86)\Steam\steamapps\common\No Body, No Problem!
+       2. The recommended way to override this without touching tracked files is
+          to create a local Directory.Build.props (already in .gitignore):
+
+              <Project>
+                <PropertyGroup>
+                  <GameDir>C:\Path\To\Game</GameDir>
+                </PropertyGroup>
+              </Project>
+
+       3. After building, copy bin\Release\net46\NoBodyMorePlayers.dll into
+              <GameDir>\BepInEx\plugins\NoBodyMorePlayers\
+       ======================================================================== -->
+
+  <PropertyGroup>
+    <GameDir Condition="'$(GameDir)' == ''">REPLACE_WITH_YOUR_GAME_PATH</GameDir>
+    <!-- Derived paths — do not edit these unless your layout is non-standard. -->
+    <BepInExDir>$(GameDir)\BepInEx</BepInExDir>
+    <GameManagedDir>$(GameDir)\No Body, No Problem!_Data\Managed</GameManagedDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+
+    <!-- ── BepInEx core ──────────────────────────────────────────────────── -->
+    <Reference Include="BepInEx">
+      <HintPath>$(BepInExDir)\core\BepInEx.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="BepInEx.Harmony">
+      <HintPath>$(BepInExDir)\core\BepInEx.Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <!-- ── HarmonyX  (BepInEx 5 ships it as 0Harmony.dll) ───────────────── -->
+    <Reference Include="0Harmony">
+      <HintPath>$(BepInExDir)\core\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <!-- ── Unity engine stubs ────────────────────────────────────────────── -->
+    <Reference Include="UnityEngine">
+      <HintPath>$(GameManagedDir)\UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(GameManagedDir)\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <!-- ── Game assembly — main game logic lives here ────────────────────── -->
+    <!-- After running dnSpy you will reference types from this DLL directly. -->
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(GameManagedDir)\Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <!-- ── Steamworks.NET (uncomment when confirmed present) ─────────────── -->
+    <!-- The dynamic Steam patches in §B of Patches.cs use reflection and      -->
+    <!-- compile without this reference.  Add it for compile-time type safety. -->
+    <!--
+    <Reference Include="Steamworks.NET">
+      <HintPath>$(GameManagedDir)\Steamworks.NET.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    -->
+
+    <!-- ── Mirror Networking (uncomment when confirmed present) ──────────── -->
+    <!-- Also uncomment §F-Mirror in Patches.cs. -->
+    <!--
+    <Reference Include="Mirror">
+      <HintPath>$(GameManagedDir)\Mirror.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    -->
+
+    <!-- ── FishNet / FishySteamworks (uncomment when confirmed present) ───── -->
+    <!-- Also uncomment §F-FishNet in Patches.cs. -->
+    <!--
+    <Reference Include="FishNet.Runtime">
+      <HintPath>$(GameManagedDir)\FishNet.Runtime.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    -->
+
+  </ItemGroup>
+
+</Project>
